@@ -1,4 +1,24 @@
+import axios from 'axios';
+
+const followersArray = [ 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell', 'lweller86' ];
+
+for(let i = 0; i < followersArray.length; i++)
+  addCards(followersArray[i]);
+
+function addCards(array){ 
+axios.get(`https://api.github.com/users/${array}`)
+  .then(resp => {
+    document.querySelector('.cards').appendChild(gitCardMaker(resp.data));
+  })
+  .catch(err => console.log(err));
+  
+}
+
+ 
+ 
 /*
+
+
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
@@ -28,7 +48,51 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+
+function gitCardMaker(gitInfo ){
+let card = document.createElement('div');
+let img = document.createElement('img');
+let cardInfo = document.createElement('div');
+let name = document.createElement('h3');
+let userName = document.createElement('p');
+let location = document.createElement('p');
+let profile = document.createElement('p');
+let profLink = document.createElement('a');
+let followers = document.createElement('p');
+let following = document.createElement('p');
+let bio = document.createElement('p');
+
+card.appendChild(img);
+card.appendChild(cardInfo);
+cardInfo.appendChild(name);
+cardInfo.appendChild(userName);
+cardInfo.appendChild(location);
+cardInfo.appendChild(profile);
+profile.appendChild(profLink);
+cardInfo.appendChild(followers);
+cardInfo.appendChild(following);
+cardInfo.appendChild(bio);
+
+card.classList.add('card');
+cardInfo.classList.add('card-info');
+name.classList.add('name');
+userName.classList.add('username');
+
+img.src = gitInfo.avatar_url;
+img.alt = "github user";
+name.textContent = gitInfo.name;
+userName.textContent = gitInfo.login;
+location.textContent = gitInfo.location;
+profLink.textCont = "Link to profile";
+profLink.href = gitInfo.html_url;
+followers.textContent = `Followers: ${gitInfo.followers}`;
+following.textcontent = `Following: ${gitInfo.following}`;
+bio.textContent = gitInfo.bio;
+
+
+return card
+}
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
